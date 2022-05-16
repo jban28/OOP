@@ -1,0 +1,2 @@
+std::make_unique<object>(star(stuff)) C++14 and onwards
+std::unique_ptr<object>(new star(stuff)) C++11
