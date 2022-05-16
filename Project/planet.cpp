@@ -5,6 +5,7 @@
 planet::planet()
 {
   set_base_params();
+  object_type = "planet";
 }
 
 planet::planet(std::string name, double ra, double dec, double lum, 

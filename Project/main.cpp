@@ -14,14 +14,15 @@ int main()
   int selection;
   bool run = true;
 
-  std::vector<std::string> main_menu_options{"Input object", 
+  std::string main_menu_options[7]{"Input object", 
   "Load object(s) from file", "List all objects", "Search objects by type",
   "Search object by name", "Save current object list", "Exit program"};
 
   while (run){
-    selection = menu("Main Menu", main_menu_options);
+    selection = menu("Main Menu", main_menu_options, 7);
     switch(selection){
-      case 1:{
+      case 1:
+      {
         objects.new_object_from_input();
         break;
       }
@@ -32,7 +33,8 @@ int main()
       }
       case 3:
       {
-        objects.list_all();
+        objects.iterate([](std::vector<std::unique_ptr<object>>::iterator obj)
+        {(*obj)->print_data();});
         break;
       }
       case 4:

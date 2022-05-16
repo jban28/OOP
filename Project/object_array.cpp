@@ -20,16 +20,10 @@ object_array::~object_array(){}
 
 void object_array::new_object_from_input()
 {
-  std::cout << "\nInput object" << std::endl;
-  std::cout << "Select object type"
-  << "\n1 : Star"
-  << "\n2 : Galaxy"
-  << "\n3 : Star Cluster" 
-  << "\n4 : Nebula"
-  << "\n5 : Planet" 
-  << std::endl;
-
-  int selection = user_input(1,5);
+  int selection;
+  std::string type;
+  selection = menu("Select object type:", object_type_options, 5);
+  type = object_type_options[selection-1];
 
   switch(selection){
     case 1:{
@@ -57,13 +51,11 @@ void object_array::new_object_from_input()
 
 void object_array::new_object_from_file()
 {
-  int delimiter_start; int delimiter_end;
-  object* new_object;
   while (true){
     std::string filename;
     std::cout << "Input the name of the csv file you would like to load: ";
     filename = user_input<std::string>();
-    filename += ".csv";
+    filename += ".dat";
     std::fstream file{filename};
 
     if(file.good()) {
@@ -72,55 +64,25 @@ void object_array::new_object_from_file()
       while (std::getline(file, line)){
         std::string object_type;
         std::string object_name;
-        std::string right_acension_string; double right_acension;
-        std::string declination_string; double declination;
-        std::string luminosity_string; double luminosity;
-        std::string distance_string; double distance;
-        delimiter_start = 0; delimiter_end = line.find(',', 0);
-        object_type = line.substr(delimiter_start, delimiter_end);
-        
-        delimiter_start = delimiter_end + 1; 
-        delimiter_end = line.find(',', delimiter_start);
-        object_name = line.substr(delimiter_start, 
-        delimiter_end-delimiter_start);
+        double right_acension;
+        double declination;
+        double luminosity;
+        double distance;
 
-        delimiter_start = delimiter_end + 1; 
-        delimiter_end = line.find(',', delimiter_start);
-        right_acension_string = line.substr(delimiter_start, 
-        delimiter_end-delimiter_start);
-
-        delimiter_start = delimiter_end + 1; 
-        delimiter_end = line.find(',', delimiter_start);
-        declination_string = line.substr(delimiter_start, 
-        delimiter_end-delimiter_start);
-
-        delimiter_start = delimiter_end + 1; 
-        delimiter_end = line.find(',', delimiter_start);
-        luminosity_string = line.substr(delimiter_start, 
-        delimiter_end-delimiter_start);
-
-        delimiter_start = delimiter_end + 1; 
-        delimiter_end = line.find(',', delimiter_start);
-        distance_string = line.substr(delimiter_start, 
-        delimiter_end-delimiter_start);
-
-        right_acension = std::stod(right_acension_string);
-        declination = std::stod(declination_string);
-        luminosity = std::stod(luminosity_string);
-        distance = std::stod(distance_string);
+        std::stringstream line_stream;
+        line_stream << line;
+        line_stream >> object_type >> object_name >> right_acension >> 
+        declination >> luminosity >> distance;
 
         if (object_type == "star"){
           std::string effective_temperature_string;double effective_temperature;
-          delimiter_start = delimiter_end + 1; 
-          effective_temperature_string = line.substr(delimiter_start);
-          effective_temperature = std::stod(effective_temperature_string);
+          line_stream >> effective_temperature;
           array.push_back(std::make_unique<star>(star(object_name, right_acension, 
           declination, luminosity, distance, effective_temperature)));
         }
         else if (object_type == "galaxy"){
           std::string hubble_type;
-          delimiter_start = delimiter_end + 1;
-          hubble_type = line.substr(delimiter_start);
+          line_stream >> hubble_type;
           array.push_back(std::make_unique<galaxy>(galaxy(object_name, right_acension, 
           declination, luminosity, distance, hubble_type)));
         }
@@ -148,50 +110,30 @@ void object_array::new_object_from_file()
   }
 }
 
-void object_array::list_all()
-{
-  std::vector<std::unique_ptr<object>>::iterator start{array.begin()};
-  std::vector<std::unique_ptr<object>>::iterator end{array.end()};
-  std::vector<std::unique_ptr<object>>::iterator object;
-  for(object = start ; object < end ; ++object){
-    (*object)->print_data();
-  }
-}
-
 void object_array::list_type()
 {
   int selection;
   std::string type;
-  selection = menu("Select object type:", object_type_options);
+  selection = menu("Select object type:", object_type_options, 5);
   type = object_type_options[selection-1];
-  std::vector<std::unique_ptr<object>>::iterator start{array.begin()};
-  std::vector<std::unique_ptr<object>>::iterator end{array.end()};
-  std::vector<std::unique_ptr<object>>::iterator object;
-  for(object = start ; object < end ; ++object){
-    if ((*object)->return_object_type() == type){
-      (*object)->print_data();
+  iterate([&](std::vector<std::unique_ptr<object>>::iterator obj)
+  {
+    if ((*obj)->return_object_type() == type){
+      (*obj)->print_data();
     }
-    else{
-      continue;
-    }
-  }
+  });
 }
 
 void object_array::list_by_name(std::string name)
 {
   int objects_found = 0;
-  std::vector<std::unique_ptr<object>>::iterator start{array.begin()};
-  std::vector<std::unique_ptr<object>>::iterator end{array.end()};
-  std::vector<std::unique_ptr<object>>::iterator object;
-  for(object = start ; object < end ; ++object){
-    if ((*object)->return_object_name() == name){
-      (*object)->print_data();
+  iterate([&](std::vector<std::unique_ptr<object>>::iterator obj)
+  {
+    if ((*obj)->return_object_type() == name){
+      (*obj)->print_data();
       objects_found += 1;
     }
-    else{
-      continue;
-    }
-  }
+  });
   if (objects_found == 0){
     std::cout << "No object found with that name" << std::endl;
   }
@@ -202,16 +144,16 @@ void object_array::save_to_file()
   std::string filename;
   std::cout << "Type the filename to save the data to: ";
   filename = user_input<std::string>();
-  filename += ".csv";
+  filename += ".dat";
   std::fstream file;
   file.open(filename, std::fstream::in);
   int selection = 1;
   if (file){
     file.close();
-    std::vector<std::string> write_options{"Overwrite file", 
+    std::string write_options[2]{"Overwrite file", 
     "Append to existing file"};
     selection = menu("File already exists. Please select write method",
-    write_options);
+    write_options, 2);
   }
   switch(selection){
     case(1):{
@@ -223,11 +165,11 @@ void object_array::save_to_file()
       break;
     }
   }
-  std::vector<std::unique_ptr<object>>::iterator start{array.begin()};
-  std::vector<std::unique_ptr<object>>::iterator end{array.end()};
-  std::vector<std::unique_ptr<object>>::iterator object;
-  for(object = start ; object < end ; ++object){
-    file << (*object)->save_string() << std::endl;
-  }
+
+  iterate([&](std::vector<std::unique_ptr<object>>::iterator obj)
+  {
+    file << (*obj)->save_string() << std::endl;
+  });
+
   file.close();
 }

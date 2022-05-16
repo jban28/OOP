@@ -7,6 +7,7 @@
 
 galaxy::galaxy(){
   set_base_params();
+  object_type = "galaxy";
   std::string hubble_type;
   std::vector<std::string> hubble_type_options{"E1", "E2", "E3", "E4", "E5",
   "E6", "E7", "Sa", "Sb", "Sc", "Sba", "Sba", "Sbc", "Irr"};
@@ -34,6 +35,6 @@ void galaxy::type_data_print()
 std::string galaxy::type_data_string()
 {
   std::stringstream save_stream;
-  save_stream << "," << hubble_type;
+  save_stream << " " << hubble_type;
   return save_stream.str();
 }

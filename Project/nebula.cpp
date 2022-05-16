@@ -4,6 +4,7 @@
 nebula::nebula()
 {
   set_base_params();
+  object_type = "nebula";
 }
 
 nebula::nebula(std::string name, double ra, double dec, double lum, double dist)

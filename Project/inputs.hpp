@@ -7,8 +7,7 @@
 #ifndef _inputs
 #define _inputs
 
-int menu(std::string prompt, std::vector<std::string> options);
-
+int menu(std::string prompt, std::string options[], const int length);
 bool validate(double input, std::string input_string);
 bool validate(int input, std::string input_string);
 bool validate (std::string input, std::string input_string);
@@ -33,8 +32,7 @@ type user_input()
       }
     }
     catch(std::string input_err){
-      std::cout << "Input cannot be converted to converted to string" <<
-      ", please try again" << std::endl;
+      std::cout << "Inputs cannot contain spaces, use - or _" << std::endl;
     }
     catch(double input_err){
       std::cout << "Input cannot be converted to converted to number" << 

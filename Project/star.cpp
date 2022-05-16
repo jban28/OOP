@@ -25,7 +25,7 @@ double temp)
 std::string star::type_data_string()
 {
   std::stringstream save_stream;
-  save_stream << "," << effective_temperature;
+  save_stream << " " << effective_temperature;
   return save_stream.str();
 }
 

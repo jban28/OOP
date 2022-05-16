@@ -1,17 +1,12 @@
 #include "inputs.hpp"
 
-int menu(std::string prompt, std::vector<std::string> options)
+int menu(std::string prompt, std::string options[], const int length)
 {
-  int index = 1;
   std::cout << "\n" << prompt << std::endl;
-  std::vector<std::string>::iterator start{options.begin()};
-  std::vector<std::string>::iterator end{options.end()};
-	std::vector<std::string>::iterator option;
-  for(option = start ; option < end ; ++option){
-    std::cout << index << " : " << *option << std::endl;
-    index += 1;
+  for(int i=0; i<length; i++){
+    std::cout << i+1 << " : " << options[i] << std::endl;
   }
-  return user_input<int>(1,index-1);
+  return user_input<int>(1,length);
 }
 
 
@@ -43,5 +38,10 @@ bool validate(int input, std::string input_string)
 
 bool validate (std::string input, std::string input_string)
 {
-  return true;
+  if (input_string.find_first_of(" ") != std::string::npos){
+    return false;
+  }
+  else{
+    return true;
+  }
 }

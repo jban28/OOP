@@ -5,6 +5,7 @@
 cluster::cluster()
 {
   set_base_params();
+  object_type = "cluster";
 }
 
 cluster::cluster(std::string name, double ra, double dec, double lum, 

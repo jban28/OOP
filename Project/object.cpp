@@ -37,8 +37,8 @@ void object::print_data()
 std::string object::save_string()
 {
   std::stringstream save_stream;
-  save_stream << object_type << "," << object_name << "," << right_ascension 
-  << "," << declination << "," << luminosity << "," << distance << ","
+  save_stream << object_type << " " << object_name << " " << right_ascension 
+  << " " << declination << " " << luminosity << " " << distance
   << type_data_string();
   return save_stream.str();
 }
