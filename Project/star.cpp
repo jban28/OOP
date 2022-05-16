@@ -1,5 +1,14 @@
 #include "star.hpp"
+#include "inputs.hpp"
 #include<sstream>
+
+star::star()
+{
+  set_base_params();
+  std::cout << "Effective temperature: ";
+  effective_temperature = user_input<double>(0, 1e99);
+  object_type = "star";
+}
 
 star::star(std::string name, double ra, double dec, double lum, double dist, 
 double temp)
@@ -13,16 +22,14 @@ double temp)
   effective_temperature = temp;
 };
 
-std::string star::save_string()
+std::string star::type_data_string()
 {
   std::stringstream save_stream;
-  save_stream << object_type << "," << object_name << "," << right_ascension 
-  << "," << declination << "," << luminosity << "," << distance << "," 
-  << effective_temperature;
+  save_stream << "," << effective_temperature;
   return save_stream.str();
 }
 
-void star::print_type_data()
+void star::type_data_print()
 {
   std::cout << "  Effective temp : " << effective_temperature << std::endl;
 }

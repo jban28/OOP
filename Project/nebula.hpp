@@ -8,11 +8,11 @@ class nebula : public object
   private:
 
   public:
+    nebula();
     nebula(std::string name, double ra, double dec, double lum, double dist);
     ~nebula(){};
-    std::string save_string();
-    void print_type_data(){};
-
+    void type_data_print(){};
+    std::string type_data_string(){return "temp";};
 };
 
 #endif

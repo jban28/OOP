@@ -2,6 +2,11 @@
 #include<string>
 #include<sstream>
 
+cluster::cluster()
+{
+  set_base_params();
+}
+
 cluster::cluster(std::string name, double ra, double dec, double lum, 
 double dist)
 {
@@ -12,11 +17,3 @@ double dist)
   luminosity = lum;
   distance = dist;
 };
-
-std::string cluster::save_string()
-{
-  std::stringstream save_stream;
-  save_stream << object_type << "," << object_name << "," << right_ascension 
-  << "," << declination << "," << luminosity << "," << distance;
-  return save_stream.str();
-}

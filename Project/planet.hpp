@@ -16,10 +16,11 @@ class planet : public object
     double orbit_period;
     double day_length;
   public:
+    planet();
     planet(std::string name, double ra, double dec, double lum, double dist);
     ~planet(){};
-    std::string save_string();
-    void print_type_data(){};
+    void type_data_print(){};
+    std::string type_data_string(){return "temp";};
 };
 
 #endif

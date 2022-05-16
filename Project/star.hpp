@@ -10,11 +10,12 @@ class star : public object
   private:
     double effective_temperature;
   public:
+    star();
     star(std::string name, double ra, double dec, double lum, double dist, 
     double temp);
     ~star(){};
-    std::string save_string();
-    void print_type_data();
+    void type_data_print();
+    std::string type_data_string();
 };
 
 #endif

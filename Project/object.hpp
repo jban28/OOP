@@ -1,4 +1,7 @@
 #include<string>
+#include<cmath>
+#include<iostream>
+#include<sstream>
 
 #ifndef _object
 #define _object
@@ -14,13 +17,16 @@ class object
     double distance; // Metres
   public:
     virtual ~object(){};
+    void set_base_params();
     double absolute_magnitude();
     double apparent_magnitude();
-    virtual std::string save_string()=0;
+    virtual std::string save_string();
     std::string return_object_type();
     std::string return_object_name();
     void print_data();
-    virtual void print_type_data()=0;
+    virtual void type_data_print()=0;
+    virtual std::string type_data_string()=0;
+    
 };
 
 #endif

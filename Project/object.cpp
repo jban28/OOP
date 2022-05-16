@@ -1,6 +1,6 @@
 #include"object.hpp"
+#include"inputs.hpp"
 
-#include<cmath>
 #include<iostream>
 
 double object::absolute_magnitude()
@@ -30,5 +30,29 @@ void object::print_data()
   << "\n  Declination    : " << declination
   << "\n  Luminosity (W) : " << luminosity
   << "\n  Distance (m)   : " << distance << std::endl;
-  print_type_data();
+  type_data_print();
+}
+
+
+std::string object::save_string()
+{
+  std::stringstream save_stream;
+  save_stream << object_type << "," << object_name << "," << right_ascension 
+  << "," << declination << "," << luminosity << "," << distance << ","
+  << type_data_string();
+  return save_stream.str();
+}
+
+void object::set_base_params()
+{
+  std::cout << "Object identifier/name: ";
+  object_name = user_input<std::string>();
+  std::cout << "Right ascension: ";
+  right_ascension = user_input<double>(0, 360);
+  std::cout << "Declination: ";
+  declination = user_input<double>(-90, +90);
+  std::cout << "Luminosity (W): ";
+  luminosity = user_input<double>(0, 1e99);
+  std::cout << "Distance (m): ";
+  distance = user_input<double>(0, 1e99);
 }
